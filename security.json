@@ -1,0 +1,29 @@
+{
+  "name": "Byhnex Subscriptions",
+  "version": "1.0.0",
+  "description": "Solana program for managing decentralized subscriptions",
+  "repository": "https://github.com/tchoifr/byhnex_subscriptions",
+  "program_id": "7fBNUdxMbSvtwhk7mvk3zF5b7nPbtsTmMe6CjSFVYcG",
+  "audited": false,
+  "audit": {
+    "status": "not audited",
+    "report": null
+  },
+  "contacts": {
+    "email": "contact@byhnex.com",
+    "github": "https://github.com/tchoifr"
+  },
+  "security": {
+    "upgradeable": true,
+    "upgrade_authority": "82wizndfsGaxbUrsStBgFne14hyk2iA5uWUp1eqBj4MQ",
+    "multisig": false
+  },
+  "policy": {
+    "bug_bounty": false,
+    "responsible_disclosure": true
+  },
+  "deployment": {
+    "cluster": "devnet",
+    "verified": false
+  }
+}

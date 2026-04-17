@@ -1,0 +1,13 @@
+[workspace]
+members = ["programs/*"]
+resolver = "2"
+
+[patch.crates-io]
+anchor-syn = { path = "crates/anchor-syn" }
+
+[profile.release]
+overflow-checks = true
+lto = true
+codegen-units = 1
+opt-level = "z"
+panic = "abort"

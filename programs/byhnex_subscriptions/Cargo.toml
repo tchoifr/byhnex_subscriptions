@@ -1,0 +1,27 @@
+[package]
+name = "eroticweb3_subscriptions"
+version = "0.1.0"
+description = "EroticWeb3 subscription payments in USDC"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "eroticweb3_subscriptions"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = "0.30.1"
+anchor-spl = "0.30.1"
+
+borsh_v1 = { package = "borsh", version = "=1.5.1" }
+borsh_derive_v1 = { package = "borsh-derive", version = "=1.5.7" }
+
+[build-dependencies]
+proc-macro2 = { version = "1.0", features = ["span-locations"] }
