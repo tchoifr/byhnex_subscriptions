@@ -1,10 +1,11 @@
 #![allow(unexpected_cfgs)]
 
 use anchor_lang::prelude::*;
+use std::str::FromStr;
 use anchor_spl::associated_token::get_associated_token_address;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("7fBNUdxMbSvtwhk7mvk3zF5b7nPbtsTmMe6CjSFVYcG");
+declare_id!("Dn7mmgwfwcncCrmLQKLPrv97oShCbQFbjNQ2FLZDAQBa");
 
 const MAX_BPS: u16 = 10_000;
 const PLATFORM_FEE_BPS: u16 = 500;
@@ -20,6 +21,17 @@ pub mod eroticweb3_subscriptions {
         usdc_mint: Pubkey,
     ) -> Result<()> {
         require!(PLATFORM_FEE_BPS <= MAX_BPS, SubscriptionError::InvalidFeeBps);
+        require_keys_eq!(
+            ctx.accounts.authority.key(),
+            Pubkey::from_str("2QTYHp16qqvxW4HYvC9QuQoY9Kkr1oMiKwGfhCUvPktP").unwrap(),
+            SubscriptionError::InvalidAuthority
+        );
+        require!(treasury != Pubkey::default(), SubscriptionError::InvalidTreasury);
+        require_keys_eq!(
+            usdc_mint,
+            Pubkey::from_str("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v").unwrap(),
+            SubscriptionError::InvalidUsdcMint
+        );
 
         let config = &mut ctx.accounts.config;
         config.authority = ctx.accounts.authority.key();
@@ -27,20 +39,7 @@ pub mod eroticweb3_subscriptions {
         config.usdc_mint = usdc_mint;
         config.platform_fee_bps = PLATFORM_FEE_BPS;
         config.bump = ctx.bumps.config;
-        Ok(())
-    }
 
-    pub fn update_config(
-        ctx: Context<UpdateConfig>,
-        treasury: Pubkey,
-        usdc_mint: Pubkey,
-    ) -> Result<()> {
-        require!(PLATFORM_FEE_BPS <= MAX_BPS, SubscriptionError::InvalidFeeBps);
-
-        let config = &mut ctx.accounts.config;
-        config.treasury = treasury;
-        config.usdc_mint = usdc_mint;
-        config.platform_fee_bps = PLATFORM_FEE_BPS;
         Ok(())
     }
 
@@ -67,10 +66,16 @@ pub mod eroticweb3_subscriptions {
         let config = &ctx.accounts.config;
 
         require_keys_eq!(
+            config.authority,
+            Pubkey::from_str("2QTYHp16qqvxW4HYvC9QuQoY9Kkr1oMiKwGfhCUvPktP").unwrap(),
+            SubscriptionError::InvalidAuthority
+        );
+        require_keys_eq!(
             usdc_mint_key,
             config.usdc_mint,
             SubscriptionError::InvalidUsdcMint
         );
+
         require!(
             validate_ata(
                 &ctx.accounts.subscriber_usdc_ata,
@@ -136,6 +141,7 @@ pub mod eroticweb3_subscriptions {
             fee: fee_amount,
             creator_amount,
         });
+
         Ok(())
     }
 }
@@ -144,6 +150,7 @@ pub mod eroticweb3_subscriptions {
 pub struct InitializeConfig<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
+
     #[account(
         init,
         payer = authority,
@@ -152,19 +159,8 @@ pub struct InitializeConfig<'info> {
         bump
     )]
     pub config: Account<'info, Config>,
-    pub system_program: Program<'info, System>,
-}
 
-#[derive(Accounts)]
-pub struct UpdateConfig<'info> {
-    pub authority: Signer<'info>,
-    #[account(
-        mut,
-        seeds = [b"config"],
-        bump = config.bump,
-        has_one = authority
-    )]
-    pub config: Account<'info, Config>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
@@ -172,7 +168,7 @@ pub struct PaySubscription<'info> {
     #[account(mut)]
     pub subscriber: Signer<'info>,
 
-    /// CHECK: creator wallet provided by the client and validated against ATA ownership.
+    /// CHECK: wallet creator validé indirectement par ownership de son ATA.
     pub creator: UncheckedAccount<'info>,
 
     #[account(
@@ -191,6 +187,8 @@ pub struct PaySubscription<'info> {
     pub platform_fee_account: Account<'info, TokenAccount>,
 
     pub usdc_mint: Account<'info, Mint>,
+
+    #[account(address = token::ID)]
     pub token_program: Program<'info, Token>,
 }
 
@@ -204,7 +202,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub const SPACE: usize = 32 * 3 + 2 + 1;
+    pub const SPACE: usize = 32 + 32 + 32 + 2 + 1;
 }
 
 #[event]
@@ -222,6 +220,7 @@ fn calculate_fee(amount: u64, fee_bps: u16) -> Result<u64> {
         .checked_mul(fee_bps as u128)
         .ok_or(SubscriptionError::MathError)?
         / MAX_BPS as u128;
+
     Ok(fee as u64)
 }
 
@@ -276,6 +275,10 @@ pub enum SubscriptionError {
     InvalidPlatformFeeAccount,
     #[msg("USDC mint invalide")]
     InvalidUsdcMint,
+    #[msg("Treasury invalide")]
+    InvalidTreasury,
+    #[msg("Authority invalide")]
+    InvalidAuthority,
     #[msg("Fonds subscriber insuffisants")]
     InsufficientSubscriberFunds,
 }

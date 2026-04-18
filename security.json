@@ -1,9 +1,14 @@
 {
-  "name": "Byhnex Subscriptions",
-  "version": "1.0.0",
-  "description": "Solana program for managing decentralized subscriptions",
+  "name": "EroticWeb3 Subscriptions",
+  "version": "0.1.0",
+  "description": "EroticWeb3 subscription payments in USDC",
   "repository": "https://github.com/tchoifr/byhnex_subscriptions",
-  "program_id": "7fBNUdxMbSvtwhk7mvk3zF5b7nPbtsTmMe6CjSFVYcG",
+  "programs": {
+    "mainnet": {
+      "name": "eroticweb3_subscriptions",
+      "program_id": "Dn7mmgwfwcncCrmLQKLPrv97oShCbQFbjNQ2FLZDAQBa"
+    }
+  },
   "audited": false,
   "audit": {
     "status": "not audited",
@@ -15,7 +20,7 @@
   },
   "security": {
     "upgradeable": true,
-    "upgrade_authority": "82wizndfsGaxbUrsStBgFne14hyk2iA5uWUp1eqBj4MQ",
+    "upgrade_authority": "2QTYHp16qqvxW4HYvC9QuQoY9Kkr1oMiKwGfhCUvPktP",
     "multisig": false
   },
   "policy": {
@@ -23,7 +28,7 @@
     "responsible_disclosure": true
   },
   "deployment": {
-    "cluster": "devnet",
-    "verified": false
+    "cluster": "mainnet-beta",
+    "verified": true
   }
 }

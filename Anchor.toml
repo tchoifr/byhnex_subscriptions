@@ -8,6 +8,9 @@ skip-lint = false
 [programs.devnet]
 eroticweb3_subscriptions = "7fBNUdxMbSvtwhk7mvk3zF5b7nPbtsTmMe6CjSFVYcG"
 
+[programs.mainnet]
+eroticweb3_subscriptions = "Dn7mmgwfwcncCrmLQKLPrv97oShCbQFbjNQ2FLZDAQBa"
+
 [registry]
 url = "https://api.apr.dev"
 
