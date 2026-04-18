@@ -2,33 +2,10 @@
   "name": "EroticWeb3 Subscriptions",
   "version": "0.1.0",
   "description": "EroticWeb3 subscription payments in USDC",
+  "contact": "contact@byhnex.com",
   "repository": "https://github.com/tchoifr/byhnex_subscriptions",
-  "programs": {
-    "mainnet": {
-      "name": "eroticweb3_subscriptions",
-      "program_id": "Dn7mmgwfwcncCrmLQKLPrv97oShCbQFbjNQ2FLZDAQBa"
-    }
-  },
-  "audited": false,
-  "audit": {
-    "status": "not audited",
-    "report": null
-  },
-  "contacts": {
-    "email": "contact@byhnex.com",
-    "github": "https://github.com/tchoifr"
-  },
   "security": {
     "upgradeable": true,
-    "upgrade_authority": "2QTYHp16qqvxW4HYvC9QuQoY9Kkr1oMiKwGfhCUvPktP",
-    "multisig": false
-  },
-  "policy": {
-    "bug_bounty": false,
-    "responsible_disclosure": true
-  },
-  "deployment": {
-    "cluster": "mainnet-beta",
-    "verified": true
+    "upgrade_authority": "2QTYHp16qqvxW4HYvC9QuQoY9Kkr1oMiKwGfhCUvPktP"
   }
 }
